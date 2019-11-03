@@ -1,7 +1,7 @@
 .tracking-in-expand {
-  -webkit-animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1)
+  -webkit-animation: tracking-in-expand 2.0s cubic-bezier(0.215, 0.61, 0.355, 1)
     both;
-  animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  animation: tracking-in-expand 2.0s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }
 
 /* ----------------------------------------------
@@ -46,7 +46,7 @@
 }
 
 body {
-  background-image: url('p.jpg');
+  background-image: url('b.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -57,9 +57,9 @@ body {
 }
 
 .tracking-in-contract {
-  -webkit-animation: tracking-in-contract 0.8s
+  -webkit-animation: tracking-in-contract 1s
     cubic-bezier(0.215, 0.61, 0.355, 1) both;
-  animation: tracking-in-contract 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  animation: tracking-in-contract 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }
 
 /* ----------------------------------------------
@@ -100,3 +100,46 @@ body {
     opacity: 1;
   }
 }
+
+.centered {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+.centeredBot {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+/* Icon Forward */
+.hvr-icon-forward {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+.hvr-icon-forward .hvr-icon {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.hvr-icon-forward:hover .hvr-icon, .hvr-icon-forward:focus .hvr-icon, .hvr-icon-forward:active .hvr-icon {
+  -webkit-transform: translateX(4px);
+  transform: translateX(4px);
+}
+
+
