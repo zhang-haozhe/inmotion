@@ -19,72 +19,42 @@ function startVideo() {
 let n = 100;
 let x = [];
 let y = [];
-let e1 = [],
-  e2 = [],
-  e3 = [],
-  e4 = [],
-  e5 = [],
-  e6 = [];
+let updatedData = [];
+const expr = [
+  'happy',
+  'neutral',
+  'surprised',
+  'sad',
+  'angry',
+  'fearful',
+  'disgusted'
+];
+const series = [];
+for (i = 0; i < expr.length; i++) {
+  series[i] = [];
+}
 
 for (i = 0; i < n; i++) {
   x[i] = i + 1;
   y[i] = 0;
-  (e1[i] = 0), (e2[i] = 0), (e3[i] = 0), (e4[i] = 0), (e5[i] = 0), (e6[i] = 0);
+  series.forEach(element => {
+    element[i] = 0;
+  });
 }
 
-var trace1 = {
-  x: x,
-  y: e1,
-  // mode: 'markers',
-  stackgroup: 'one'
-  // line: {
-  //   simplify: false,
-  //   color: 'rgb(100, 255, 20)'
-  // }
-  // marker: {
-  //   color: 'rgba(17, 157, 255,0.5)',
-  //   size: 20
-  //   // line: {
-  //   //   color: 'rgb(231, 99, 250)',
-  //   //   width: 3
-  //   // }
-  // }
-};
-
-var trace2 = {
-  x: x,
-  y: e2,
-  stackgroup: 'one'
-};
-
-var trace3 = {
-  x: x,
-  y: e3,
-  stackgroup: 'one'
-};
-
-var trace4 = {
-  x: x,
-  y: e4,
-  stackgroup: 'one'
-};
-
-var trace5 = {
-  x: x,
-  y: e5,
-  stackgroup: 'one'
-};
-
-var trace6 = {
-  x: x,
-  y: e6,
-  stackgroup: 'one'
-};
-
-var data = [trace1, trace2, trace3, trace4, trace5, trace6];
-var layout = {
-  title: 'Emotion Diagram',
-  showlegend: false,
+let data = [];
+for (let i = 0; i < series.length; i++) {
+  data[i] = {
+    x: x,
+    y: series[i],
+    stackgroup: 'one',
+    legendgroup: expr[i],
+    name: expr[i]
+  };
+}
+let layout = {
+  title: 'Emotion Real-time Diagram',
+  showlegend: true,
   yaxis: { range: [0, 1] }
 };
 
@@ -102,41 +72,18 @@ video.addEventListener('play', () => {
       .withFaceExpressions();
     function update() {
       let cum = 0;
-      cum += detections.expressions.happy;
-      e1 = e1.slice(1, n).concat(cum);
-      cum += detections.expressions.neutral;
-      e2 = e2.slice(1, n).concat(cum);
-      cum += detections.expressions.surprised;
-      e3 = e3.slice(1, n).concat(cum);
-      cum += detections.expressions.sad;
-      e4 = e4.slice(1, n).concat(cum);
-      cum += detections.expressions.angry;
-      e5 = e5.slice(1, n).concat(cum);
-      cum += detections.expressions.fearful;
-      e6 = e6.slice(1, n).concat(cum);
+      for (let i = 0; i < series.length; i++) {
+        cum += detections.expressions[expr[i]];
+        series[i].push(cum);
+        series[i].shift();
+      }
+      for (let i = 0; i < series.length; i++) {
+        updatedData[i] = { y: series[i] };
+      }
       Plotly.animate(
         TESTER,
         {
-          data: [
-            {
-              y: e1
-            },
-            {
-              y: e2
-            },
-            {
-              y: e3
-            },
-            {
-              y: e4
-            },
-            {
-              y: e5
-            },
-            {
-              y: e6
-            }
-          ]
+          data: updatedData
         },
         {
           transition: {
