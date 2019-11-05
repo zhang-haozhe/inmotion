@@ -1,5 +1,6 @@
 const video = document.getElementById('video');
 const TESTER = document.getElementById('tester');
+const canvasDiv = document.getElementById('canvasDiv');
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -62,8 +63,8 @@ Plotly.newPlot(TESTER, data, layout);
 
 video.addEventListener('play', () => {
   const canvas = faceapi.createCanvasFromMedia(video);
-  document.body.insertBefore(canvas, document.body.childNodes[0]);
-  const displaySize = { width: video.width, height: video.height };
+  canvasDiv.insertBefore(canvas, canvasDiv.childNodes[1]);
+  const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
   faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
     const detections = await faceapi
