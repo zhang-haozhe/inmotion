@@ -9,7 +9,7 @@ Promise.all([
 
 
 
-
+let Descriptor = null;
 const img = document.getElementById('imageUpload');
 
 
@@ -18,6 +18,8 @@ if (img) {
 
         image = await faceapi.bufferToImage(img.files[0])
         Descriptor = loadLabeledImages(image);
+        Descriptor.then(value => { console.log(value); debugger; })
+            .catch(() => { debugger; });
         console.log(Descriptor)
     })
 }
