@@ -16,19 +16,21 @@ const img = document.getElementById('imageUpload');
 if (img) {
     img.addEventListener('change', async () => {
 
-        image = await faceapi.bufferToImage(img.files[0])
+        image = await faceapi.bufferToImage(img.files[0]);
         Descriptor = loadLabeledImages(image);
-        Descriptor.then(value => { console.log(value); debugger; })
-            .catch(() => { debugger; });
-        console.log(Descriptor)
+        Descriptor.then((value) => {
+            var jsonData = JSON.stringify(value);
+            download(jsonData, "descriptprs.json", 'text/plain')
+            console.log(value);
+        })
+
+
     })
 }
 
 
 
-
 async function loadLabeledImages(image) {
-
     const labels = ['owner']
     return Promise.all(
         labels.map(async label => {
@@ -39,9 +41,17 @@ async function loadLabeledImages(image) {
 
                 descriptions.push(detections.descriptor)
             }
-            console.log(1)
             return new faceapi.LabeledFaceDescriptors(label, descriptions)
         })
     )
 }
 
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {
+        type: contentType
+    });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
