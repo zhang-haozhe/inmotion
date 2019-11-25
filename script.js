@@ -197,6 +197,7 @@ async function compare(detections, displaySize, faceMatcher) {
       // console.log("dis:", dis)
     }
   })
+
   return index;
   // })
 }
