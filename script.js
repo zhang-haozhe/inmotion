@@ -1,39 +1,34 @@
-const video = document.getElementById("video");
-const TESTER = document.getElementById("tester");
-const canvasDiv = document.getElementById("canvasDiv");
-let faceMatcher = null;
+
+
+const video = document.getElementById('video');
+const TESTER = document.getElementById('tester');
+const canvasDiv = document.getElementById('canvasDiv');
+let faceMatcher = null
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-  faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-  faceapi.nets.faceExpressionNet.loadFromUri("/models"),
-  faceapi.nets.ageGenderNet.loadFromUri("/models")
+  faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+  faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+  faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+  faceapi.nets.faceExpressionNet.loadFromUri('/models')
 ]).then(startVideo);
 
 async function startVideo() {
-  const response = await fetch("./descriptors.json");
+  const response = await fetch('./descriptors.json');
   const myJson = await response.json();
 
-<<<<<<< HEAD
   var newLabeledFaceDescriptors = myJson.map(x => faceapi.LabeledFaceDescriptors.fromJSON(x));
+
   //    console.log(newLabeledFaceDescriptors);
+
   faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6)
-=======
-  var newLabeledFaceDescriptors = myJson.map(x =>
-    faceapi.LabeledFaceDescriptors.fromJSON(x)
-  );
-
-  //    console.log(newLabeledFaceDescriptors);
-
-  faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
->>>>>>> 6e7f6451d8d72bcfbf77fdde6694e31e8df77a8b
   navigator.getUserMedia(
     { video: {} },
     stream => (video.srcObject = stream),
     err => console.error(err)
   );
 }
+
+
 
 //faceMatcher
 // const response = await fetch('./descriptors.json');
@@ -50,13 +45,13 @@ let x = [];
 let y = [];
 let updatedData = [];
 const expr = [
-  "happy",
-  "neutral",
-  "surprised",
-  "sad",
-  "angry",
-  "fearful",
-  "disgusted"
+  'happy',
+  'neutral',
+  'surprised',
+  'sad',
+  'angry',
+  'fearful',
+  'disgusted'
 ];
 const series = [];
 for (i = 0; i < expr.length; i++) {
@@ -76,41 +71,39 @@ for (let i = 0; i < series.length; i++) {
   data[i] = {
     x: x,
     y: series[i],
-    stackgroup: "one",
+    stackgroup: 'one',
     legendgroup: expr[i],
     name: expr[i]
   };
 }
 let layout = {
-  title: "Emotion Real-time Diagram",
+  title: 'Emotion Real-time Diagram',
   showlegend: true,
   yaxis: { range: [0, 1] }
 };
 
 Plotly.newPlot(TESTER, data, layout);
 
-video.addEventListener("play", () => {
+video.addEventListener('play', () => {
   const canvas = faceapi.createCanvasFromMedia(video);
   canvasDiv.insertBefore(canvas, canvasDiv.childNodes[1]);
-  debugger;
   const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
   faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
-    const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+    const detections = await faceapi.detectAllFaces
+      (video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceExpressions()
-      .withAgeAndGender()
       .withFaceDescriptors();
     //
 
     //compare(detections, displaySize)
 
-
     //
 
     //
     function update(index) {
+
       let cum = 0;
       for (let i = 0; i < series.length; i++) {
         cum += detections[index].expressions[expr[i]];
@@ -127,6 +120,7 @@ video.addEventListener("play", () => {
         },
         {
           transition: {
+
             duration: 0
           },
           frame: {
@@ -138,36 +132,22 @@ video.addEventListener("play", () => {
     }
 
     if (detections.length != 0) {
-      let index = [];
+      let index = 0;
       if (detections.length > 0) {
         index = await compare(detections, displaySize, faceMatcher);
-        console.log("indexUp:", index[0]);
+        console.log("indexUp:", index)
       }
 
-      console.log("index:", index[0]);
-      requestAnimationFrame(() => update(index[0]));
-      const resizedDetections = faceapi.resizeResults(
-        detections[index[0]],
-        displaySize
-      );
-      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+      console.log("index:", index)
+      requestAnimationFrame(() => update(index));
+      const resizedDetections = faceapi.resizeResults(detections[index], displaySize);
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
       faceapi.draw.drawDetections(canvas, resizedDetections);
       faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
       faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-      const box = resizedDetections.detection.box;
-      const drawBox = new faceapi.draw.DrawBox(box, {
-        label:
-          index[2] +
-          " " +
-          index[1].toFixed(2).toString() +
-          " Age " +
-          detections[0].age.toFixed(0) +
-          " Gender " +
-          detections[0].gender
-      });
-      drawBox.draw(canvas);
+
     } else {
-      console.log("detection undefined");
+      console.log('detection undefined');
     }
     // if (detections != undefined || detections.length != 0) {
     //   requestAnimationFrame(() => update(index));
@@ -180,10 +160,14 @@ video.addEventListener("play", () => {
     // } else {
     //   console.log('detections is undefined ');
     // }
+
   }, 100); //0.1 second per frame
 });
 
+
 async function compare(detections, displaySize, faceMatcher) {
+
+
   //load
   // const response = await fetch('./descriptors.json');
   // const myJson = await response.json();
@@ -196,11 +180,8 @@ async function compare(detections, displaySize, faceMatcher) {
 
   //faceapi.matchDimensions(canvas, displaySize)
   //const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()
-  const resizedDetections = faceapi.resizeResults(detections, displaySize);
-  debugger;
-  const results = resizedDetections.map(d =>
-    faceMatcher.findBestMatch(d.descriptor)
-  );
+  const resizedDetections = faceapi.resizeResults(detections, displaySize)
+  const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
 
   // const box = resizedDetections[i].detection.box
   // const drawBox = new faceapi.draw.DrawBox(box, {
@@ -215,13 +196,8 @@ async function compare(detections, displaySize, faceMatcher) {
       index = i;
       // console.log("dis:", dis)
     }
-<<<<<<< HEAD
   })
-
   return index;
-=======
-  });
-  return [index, dis, results[0].label];
->>>>>>> 6e7f6451d8d72bcfbf77fdde6694e31e8df77a8b
   // })
 }
+
