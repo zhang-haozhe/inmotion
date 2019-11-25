@@ -4,7 +4,11 @@
   "description": "",
   "main": "script.js",
   "dependencies": {
+<<<<<<< HEAD
     "file-saver": "^2.0.2",
+=======
+    "face-api.js": "^0.21.0",
+>>>>>>> 6e7f6451d8d72bcfbf77fdde6694e31e8df77a8b
     "live-server": "^1.2.1"
   },
   "devDependencies": {},
