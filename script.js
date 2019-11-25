@@ -17,9 +17,7 @@ async function startVideo() {
   const myJson = await response.json();
 
   var newLabeledFaceDescriptors = myJson.map(x => faceapi.LabeledFaceDescriptors.fromJSON(x));
-
   //    console.log(newLabeledFaceDescriptors);
-
   faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6)
   navigator.getUserMedia(
     { video: {} },
@@ -98,6 +96,7 @@ video.addEventListener('play', () => {
     //
 
     //compare(detections, displaySize)
+
 
     //
 

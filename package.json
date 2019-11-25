@@ -4,6 +4,7 @@
   "description": "",
   "main": "script.js",
   "dependencies": {
+    "file-saver": "^2.0.2",
     "live-server": "^1.2.1"
   },
   "devDependencies": {},

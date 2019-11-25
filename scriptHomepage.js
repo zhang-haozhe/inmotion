@@ -1,3 +1,6 @@
+import { saveAs } from 'file-saver';
+
+
 
 
 Promise.all([
@@ -20,8 +23,10 @@ if (img) {
         Descriptor = loadLabeledImages(image);
         Descriptor.then((value) => {
             var jsonData = JSON.stringify(value);
-            download(jsonData, "descriptprs.json", 'text/plain')
-            console.log(value);
+
+            let Fil
+            //download(jsonData, "descriptprs.json", 'text/plain')
+
         })
 
 
