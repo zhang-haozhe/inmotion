@@ -7,7 +7,8 @@ Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
   faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
   faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-  faceapi.nets.faceExpressionNet.loadFromUri("/models")
+  faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+  faceapi.nets.ageGenderNet.loadFromUri("/models")
 ]).then(startVideo);
 
 async function startVideo() {
@@ -93,6 +94,7 @@ video.addEventListener("play", () => {
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceExpressions()
+      .withAgeAndGender()
       .withFaceDescriptors();
     //
 
@@ -145,10 +147,16 @@ video.addEventListener("play", () => {
       faceapi.draw.drawDetections(canvas, resizedDetections);
       faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
       faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-      debugger;
       const box = resizedDetections.detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        label: index[2] + " distance " + index[1].toFixed(2).toString()
+        label:
+          index[2] +
+          " " +
+          index[1].toFixed(2).toString() +
+          " Age " +
+          detections[0].age.toFixed(0) +
+          " Gender " +
+          detections[0].gender
       });
       drawBox.draw(canvas);
     } else {

@@ -4,6 +4,7 @@
   "description": "",
   "main": "script.js",
   "dependencies": {
+    "face-api.js": "^0.21.0",
     "live-server": "^1.2.1"
   },
   "devDependencies": {},
