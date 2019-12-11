@@ -1,37 +1,35 @@
 
 
-
-
 Promise.all([
     faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
     faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
     faceapi.nets.faceExpressionNet.loadFromUri('/models'),
     faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
-]).then();
+]).then(start);
 
 
+function start() {
+    let Descriptor = null;
+    const img = document.getElementById('imageUpload');
 
-let Descriptor = null;
-const img = document.getElementById('imageUpload');
+    // const response = await fetch('example.com', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ example: 'data' }),
+    //   })
 
-
-if (img) {
-    img.addEventListener('change', async () => {
-
-        image = await faceapi.bufferToImage(img.files[0]);
-        Descriptor = loadLabeledImages(image);
-        Descriptor.then((value) => {
-            var jsonData = JSON.stringify(value);
-
-            let Fil
-            //download(jsonData, "descriptprs.json", 'text/plain')
+    if (img) {
+        img.addEventListener('change', async () => {
+            //console.log(img.files[0])
+            const image = await faceapi.bufferToImage(img.files[0]);
+            Descriptor = loadLabeledImages(image);
+            Descriptor.then((value) => {
+                axios.post('http://localhost:8080/descriptor', JSON.stringify(value))
+            })
 
         })
-
-
-    })
+    }
 }
-
 
 
 async function loadLabeledImages(image) {
@@ -50,12 +48,3 @@ async function loadLabeledImages(image) {
     )
 }
 
-function download(content, fileName, contentType) {
-    var a = document.createElement("a");
-    var file = new Blob([content], {
-        type: contentType
-    });
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.click();
-}
