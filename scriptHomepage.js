@@ -22,10 +22,10 @@ function start() {
         img.addEventListener('change', async () => {
             //console.log(img.files[0])
             const image = await faceapi.bufferToImage(img.files[0]);
-            Descriptor = loadLabeledImages(image);
-            Descriptor.then((value) => {
-                axios.post('http://localhost:8080/descriptor', JSON.stringify(value))
-            })
+            Descriptor = await loadLabeledImages(image);
+            console.log(Descriptor)
+            axios.post('http://localhost:8080/descriptor', Descriptor)
+
 
         })
     }
@@ -40,7 +40,6 @@ async function loadLabeledImages(image) {
             for (let i = 1; i <= 1; i++) {
 
                 const detections = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor()
-
                 descriptions.push(detections.descriptor)
             }
             return new faceapi.LabeledFaceDescriptors(label, descriptions)

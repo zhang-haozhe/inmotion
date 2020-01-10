@@ -1,5 +1,6 @@
 
 
+
 const video = document.getElementById("video");
 const TESTER = document.getElementById("tester");
 const canvasDiv = document.getElementById("canvasDiv");
@@ -22,16 +23,18 @@ async function startVideo() {
   //   faceapi.LabeledFaceDescriptors.fromJSON(x)
   // );
   let response = await axios.get('http://localhost:8080/get')
-
   let val = Object.values(response.data)
-  let newLabeledFaceDescriptors = val.map(x =>
-    faceapi.LabeledFaceDescriptors(x.label, x.descriptor)
-  );
-
-
-  //    console.log(newLabeledFaceDescriptors);
-
+  let newLabeledFaceDescriptors = [];
+  await val.forEach(async x => {
+    let array = x.descriptors;
+    let inputArray = []
+    await array.forEach(element => {
+      inputArray.push(new Float32Array(element))
+    })
+    newLabeledFaceDescriptors.push(new faceapi.LabeledFaceDescriptors(x.label, inputArray))
+  })
   faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
+  // faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
   navigator.getUserMedia(
     { video: {} },
     stream => (video.srcObject = stream),
@@ -156,6 +159,9 @@ video.addEventListener("play", () => {
       faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
       faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
       const box = resizedDetections.detection.box;
+      //
+      index[2] = faceMatcher._labeledDescriptors[0].label;
+      //
       const drawBox = new faceapi.draw.DrawBox(box, {
         label:
           index[2] +
