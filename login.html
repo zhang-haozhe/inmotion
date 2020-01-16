@@ -14,6 +14,7 @@
       integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
       crossorigin="anonymous"
     />
+    <script src="auth.js"></script>
 
     <link rel="stylesheet" href="css/style.css" />
     <title>Welcome To InMotion</title>
@@ -35,7 +36,7 @@
       </div>
       <h1 class="large text-primary">Sign In</h1>
       <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
-      <form class="form" action="dashboard.html">
+      <form class="form" action="index.html">
         <div class="form-group">
           <input
             type="email"
@@ -47,7 +48,12 @@
         <div class="form-group">
           <input type="password" placeholder="Password" name="password" />
         </div>
-        <input type="submit" class="btn btn-primary" value="Login" />
+        <input
+          type="submit"
+          class="btn btn-primary"
+          value="Login"
+          onclick="login()"
+        />
       </form>
       <p class="my-1">
         Don't have an account? <a href="register.html">Sign Up</a>
