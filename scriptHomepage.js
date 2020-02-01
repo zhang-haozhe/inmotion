@@ -1,13 +1,3 @@
-// axios.post(
-//   "http://localhost:8080/api/auth",
-//   {
-//     email: "techguyinfo@gmail.com",
-//     password: "123456"
-//   },
-//   {
-//     "Content-Type": "application/json"
-//   }
-// );
 Promise.all([
   faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
   faceapi.nets.faceRecognitionNet.loadFromUri("/models"),

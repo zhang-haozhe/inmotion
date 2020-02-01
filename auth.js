@@ -11,12 +11,19 @@ const login = async function(email, password) {
   const body = JSON.stringify({ email, password });
   // console.log(body)
   try {
+    var token = "";
     const res = await axios
       .post("http://localhost:8080/api/auth", body, config)
       .then(response => {
-        console.log(body);
-        console.log(response);
+        // console.log(response);
+        // console.log(response.data.token);
+        token = response.data.token;
       });
+    //debugger;
+    //localStorage.setItem("token", token);
+    //console.log(localStorage.getItem("token"));
+    document.cookie = `token=${token}`;
+    console.log(document.cookie.substring(6)); //this is the token
 
     // dispatch({
     //   //   type: LOGIN_SUCCESS,
@@ -39,7 +46,7 @@ const login = async function(email, password) {
 };
 
 //Register User
-const register = async function (name, email, password) {
+const register = async function(name, email, password) {
   const config = {
     headers: {
       "Content-Type": "application/json"
@@ -49,8 +56,14 @@ const register = async function (name, email, password) {
   const body = JSON.stringify({ name, email, password });
 
   try {
-    const res = await axios.post("http://localhost:8080/api/users", body, config).then(response=>{console.log(body);
-    console.log(response)});
+    var token = "";
+    const res = await axios
+      .post("http://localhost:8080/api/users", body, config)
+      .then(response => {
+        console.log(response);
+        token = response.data.token;
+      });
+    document.cookie = `token=${token}`;
 
     // dispatch({
     //   type: REGISTER_SUCCESS,

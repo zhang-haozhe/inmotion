@@ -3,7 +3,6 @@ const TESTER = document.getElementById("tester");
 const canvasDiv = document.getElementById("canvasDiv");
 let faceMatcher = null;
 
-
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
   faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
@@ -12,11 +11,28 @@ Promise.all([
   faceapi.nets.ageGenderNet.loadFromUri("/models")
 ]).then(startVideo);
 
-// var token = localStorage.getItem("token");
+var token = document.cookie.substring(6);
+if (document.cookie) {
+  if (token) {
+    axios.defaults.headers.common["x-auth-token"] = token;
+  } else {
+    delete axios.defaults.headers.common["x-auth-token"];
+  }
+}
 
-// if (localStorage.token) {
-//   setAuthToken(localStorage.token);
-// }
+let myFirstPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    if (token) resolve("token!");
+    else {
+      alert("You have not logged in.");
+      window.location = "http://127.0.0.1:8080/login.html"; //Direct to the login page
+    }
+  }, 50);
+});
+
+myFirstPromise.then(stuff => {
+  console.log(token); //FIXME: check if token is valid
+});
 
 // let myFirstPromise = new Promise((resolve, reject) => {
 //   // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
@@ -40,7 +56,7 @@ async function startVideo() {
   // var newLabeledFaceDescriptors = myJson.map(x =>
   //   faceapi.LabeledFaceDescriptors.fromJSON(x)
   // );
-  let response = JSON.parse(sessionStorage.getItem('descriptor'))
+  let response = JSON.parse(sessionStorage.getItem("descriptor"));
 
   let val = Object.values(response);
   let newLabeledFaceDescriptors = [];
@@ -123,13 +139,13 @@ video.addEventListener("play", () => {
   const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
   faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
-    console.log('before', Date())
+    console.log("before", Date());
     const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceExpressions()
       .withFaceDescriptors();
-    console.log('after', Date())
+    console.log("after", Date());
     //
     //compare(detections, displaySize)
 
