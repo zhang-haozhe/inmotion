@@ -34,7 +34,10 @@ app.use(cors());
 
 let value = null;
 
-let descriptor = req.body;
+app.post("/descriptor", (req, res) => {
+  let descriptor = req.body;
+  console.log(descriptor);
+})
 
 app.get('/get', (req, res) => {
   console.log(value);
