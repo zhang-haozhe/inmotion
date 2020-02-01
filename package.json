@@ -15,6 +15,7 @@
     "live-server": "^1.2.1",
     "mongoose": "^5.8.11",
     "node_module": "0.0.0",
+    "path": "^0.12.7",
     "proxy": "http://localhost:8080/",
     "request": "^2.88.0"
   },

@@ -1,4 +1,5 @@
 const video = document.getElementById("video");
+const videoUpload = document.getElementById("videoUpload")
 const TESTER = document.getElementById("tester");
 const canvasDiv = document.getElementById("canvasDiv");
 let faceMatcher = null;
@@ -12,34 +13,7 @@ Promise.all([
   faceapi.nets.ageGenderNet.loadFromUri("/models")
 ]).then(startVideo);
 
-// var token = localStorage.getItem("token");
-
-// if (localStorage.token) {
-//   setAuthToken(localStorage.token);
-// }
-
-// let myFirstPromise = new Promise((resolve, reject) => {
-//   // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
-//   // In this example, we use setTimeout(...) to simulate async code.
-//   // In reality, you will probably be using something like XHR or an HTML5 API.
-//   setTimeout(function() {
-//     if (!token) resolve("Success!"); // Yay! Everything went well!
-//   }, 50);
-// });
-
-// myFirstPromise.then(successMessage => {
-//   // successMessage is whatever we passed in the resolve(...) function above.
-//   // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-//   console.log(token);
-// });
-
 async function startVideo() {
-  // const response = await fetch("./descriptors.json");
-  // const myJson = await response.json();
-  // console.log(myJson)
-  // var newLabeledFaceDescriptors = myJson.map(x =>
-  //   faceapi.LabeledFaceDescriptors.fromJSON(x)
-  // );
   let response = JSON.parse(sessionStorage.getItem('descriptor'))
 
   let val = Object.values(response);
@@ -55,24 +29,24 @@ async function startVideo() {
     );
   });
   faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
-  // faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
-  navigator.getUserMedia(
-    { video: {} },
-    stream => (video.srcObject = stream),
-    err => console.error(err)
-  );
+
+  //   navigator.getUserMedia(
+  //     { video: {} },
+  //     stream => (video.srcObject = stream),
+  //     err => console.error(err)
+  //   );
 }
 
-//faceMatcher
-// const response = await fetch('./descriptors.json');
-// const myJson = await response.json();
+videoUpload.addEventListener('change', () => {
+  if (videoUpload) {
+    let videoURL = window.URL.createObjectURL(videoUpload.files[0])
+    console.log(videoURL)
+    video.setAttribute("src", videoURL)
+  }
+})
 
-// var newLabeledFaceDescriptors = myJson.map(x => faceapi.LabeledFaceDescriptors.fromJSON(x));
 
-// //    console.log(newLabeledFaceDescriptors);
-
-// const faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6)
-//
+console.log(video)
 let n = 100;
 let x = [];
 let y = [];

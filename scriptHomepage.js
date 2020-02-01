@@ -7,24 +7,39 @@ Promise.all([
 ]).then(start);
 
 
-
 function start() {
     const img = document.getElementById('imageUpload');
 
-
     if (img) {
         img.addEventListener('change', async () => {
-            console.log('change')
-            faceapi.bufferToImage(img.files[0]).then((image) => {
-                loadLabeledImages(image).then(values => {
-                    const descriptor = JSON.stringify(values);
-                    sessionStorage.setItem('descriptor', descriptor)
-                });
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    const imgUrl = window.URL.createObjectURL(img.files[0])
+                    let imageTag = document.createElement("IMG");
+                    imageTag.src = imgUrl;
+                    imageTag.setAttribute("height", "30%");
+                    imageTag.setAttribute("width", "40%");
+                    resolve(imageTag);
+                }),
+                new Promise((resolve, reject) => {
+                    faceapi.bufferToImage(img.files[0]).then((image) => {
+                        loadLabeledImages(image).then(values => {
+                            const descriptor = JSON.stringify(values);
+                            resolve(descriptor);
+                        });
+                    })
+                })
+            ]).then(values => {
+                //image
+                console.log(values[0])
+                document.getElementById('imageShow').appendChild(values[0])
+                //descriptor
+                sessionStorage.setItem('descriptor', values[1])
             })
         })
     }
 }
-
+// sessionStorage.setItem('descriptor', descriptor)
 async function loadLabeledImages(image) {
     const labels = ['owner']
     return Promise.all(
