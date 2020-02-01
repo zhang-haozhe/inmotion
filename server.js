@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Define Routes
+app.use(cors());
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/profile", require("./routes/api/profile"));
@@ -30,24 +31,21 @@ app.use("/api/posts", require("./routes/api/posts"));
 //   res.setHeader("Access-Control-Allow-Method", "GET,POST,DELETE");
 //   next();
 // });
-app.use(cors());
 
 let value = null;
 
 app.post("/descriptor", (req, res) => {
   let descriptor = req.body;
-  console.log(descriptor);
-  //console.log(res.body);
+  console.log('desc', descriptor);
+  value = descriptor
 });
 
 app.get("/get", (req, res) => {
-  console.log(value);
+  console.log('value', value);
   res.send(value);
 });
 
-app.post("/user", (req, res) => {
-  console.log(req.body);
-});
+
 
 app.listen(port, () => {
   console.log("server start");

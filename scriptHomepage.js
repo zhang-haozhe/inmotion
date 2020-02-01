@@ -1,5 +1,4 @@
 
-
 Promise.all([
     faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
     faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
@@ -8,29 +7,23 @@ Promise.all([
 ]).then(start);
 
 
+
 function start() {
-    let Descriptor = null;
     const img = document.getElementById('imageUpload');
 
-    // const response = await fetch('example.com', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ example: 'data' }),
-    //   })
 
     if (img) {
         img.addEventListener('change', async () => {
-            //console.log(img.files[0])
-            const image = await faceapi.bufferToImage(img.files[0]);
-            Descriptor = await loadLabeledImages(image);
-            console.log(Descriptor)
-            axios.post('http://localhost:8080/descriptor', Descriptor)
-
-
+            console.log('change')
+            faceapi.bufferToImage(img.files[0]).then((image) => {
+                loadLabeledImages(image).then(values => {
+                    const descriptor = JSON.stringify(values);
+                    sessionStorage.setItem('descriptor', descriptor)
+                });
+            })
         })
     }
 }
-
 
 async function loadLabeledImages(image) {
     const labels = ['owner']

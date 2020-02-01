@@ -3,6 +3,7 @@ const TESTER = document.getElementById("tester");
 const canvasDiv = document.getElementById("canvasDiv");
 let faceMatcher = null;
 
+
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
   faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
@@ -11,26 +12,26 @@ Promise.all([
   faceapi.nets.ageGenderNet.loadFromUri("/models")
 ]).then(startVideo);
 
-var token = localStorage.getItem("token");
+// var token = localStorage.getItem("token");
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
+// if (localStorage.token) {
+//   setAuthToken(localStorage.token);
+// }
 
-let myFirstPromise = new Promise((resolve, reject) => {
-  // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
-  // In this example, we use setTimeout(...) to simulate async code.
-  // In reality, you will probably be using something like XHR or an HTML5 API.
-  setTimeout(function() {
-    if (!token) resolve("Success!"); // Yay! Everything went well!
-  }, 50);
-});
+// let myFirstPromise = new Promise((resolve, reject) => {
+//   // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
+//   // In this example, we use setTimeout(...) to simulate async code.
+//   // In reality, you will probably be using something like XHR or an HTML5 API.
+//   setTimeout(function() {
+//     if (!token) resolve("Success!"); // Yay! Everything went well!
+//   }, 50);
+// });
 
-myFirstPromise.then(successMessage => {
-  // successMessage is whatever we passed in the resolve(...) function above.
-  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-  console.log(token);
-});
+// myFirstPromise.then(successMessage => {
+//   // successMessage is whatever we passed in the resolve(...) function above.
+//   // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+//   console.log(token);
+// });
 
 async function startVideo() {
   // const response = await fetch("./descriptors.json");
@@ -39,8 +40,9 @@ async function startVideo() {
   // var newLabeledFaceDescriptors = myJson.map(x =>
   //   faceapi.LabeledFaceDescriptors.fromJSON(x)
   // );
-  let response = await axios.get("http://localhost:8080/get");
-  let val = Object.values(response.data);
+  let response = JSON.parse(sessionStorage.getItem('descriptor'))
+
+  let val = Object.values(response);
   let newLabeledFaceDescriptors = [];
   await val.forEach(async x => {
     let array = x.descriptors;
@@ -121,12 +123,13 @@ video.addEventListener("play", () => {
   const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
   faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
+    console.log('before', Date())
     const detections = await faceapi
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceExpressions()
-      .withAgeAndGender()
       .withFaceDescriptors();
+    console.log('after', Date())
     //
     //compare(detections, displaySize)
 
@@ -195,52 +198,22 @@ video.addEventListener("play", () => {
     } else {
       console.log("detection undefined");
     }
-    // if (detections != undefined || detections.length != 0) {
-    //   requestAnimationFrame(() => update(index));
-    //   console.log('detection updated');
-    //   const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    //   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-    //   faceapi.draw.drawDetections(canvas, resizedDetections);
-    //   faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-    //   faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-    // } else {
-    //   console.log('detections is undefined ');
-    // }
-  }, 100); //0.1 second per frame
+  }, 10); //0.1 second per frame
 });
 
 async function compare(detections, displaySize, faceMatcher) {
-  //load
-  // const response = await fetch('./descriptors.json');
-  // const myJson = await response.json();
-
-  // var newLabeledFaceDescriptors = myJson.map(x => faceapi.LabeledFaceDescriptors.fromJSON(x));
-
-  // //    console.log(newLabeledFaceDescriptors);
-
-  // const faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6)
-
-  //faceapi.matchDimensions(canvas, displaySize)
-  //const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()
   const resizedDetections = faceapi.resizeResults(detections, displaySize);
   const results = resizedDetections.map(d =>
     faceMatcher.findBestMatch(d.descriptor)
   );
 
-  // const box = resizedDetections[i].detection.box
-  // const drawBox = new faceapi.draw.DrawBox(box, {
-  //     label: result.toString()
-  // })
-  // drawBox.draw(canvas)
   let index = 0;
   let dis = 1;
   await results.forEach((result, i) => {
     if (result._distance < dis) {
       dis = result._distance;
       index = i;
-      // console.log("dis:", dis)
     }
   });
   return [index, dis, results[0].label];
-  // })
 }

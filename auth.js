@@ -1,7 +1,7 @@
 //import setAuthToken from "utils/setAuthToken";
 
 //Login User
-const login = async function(email, password) {
+const login = async function (email, password) {
   const config = {
     headers: {
       "Content-Type": "application/json"
@@ -9,9 +9,10 @@ const login = async function(email, password) {
   };
 
   const body = JSON.stringify({ email, password });
-
+  console.log(body)
   try {
-    const res = await axios.post("/api/auth", body, config).then(response => {
+    const res = await axios.post("http://localhost:8080/api/auth", body, config).then(response => {
+      console.log(body)
       console.log(response);
     });
 
