@@ -1,8 +1,7 @@
-import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
+//import setAuthToken from "utils/setAuthToken";
 
 //Login User
-export const login = (email, password) => async dispatch => {
+const login = async function(email, password) {
   const config = {
     headers: {
       "Content-Type": "application/json"
@@ -12,14 +11,16 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post("/api/auth", body, config);
-
-    dispatch({
-      //   type: LOGIN_SUCCESS,
-      payload: res.data
+    const res = await axios.post("/api/auth", body, config).then(response => {
+      console.log(response);
     });
 
-    dispatch(loadUser());
+    // dispatch({
+    //   //   type: LOGIN_SUCCESS,
+    //   payload: res.data
+    // });
+
+    //dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
     console.log(errors);
@@ -28,8 +29,8 @@ export const login = (email, password) => async dispatch => {
     //   errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
     // }
 
-    dispatch({
-      //   type: LOGIN_FAIL
-    });
+    // dispatch({
+    //   //   type: LOGIN_FAIL
+    // });
   }
 };

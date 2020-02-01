@@ -33,14 +33,15 @@
     </nav>
 
     <section class="container">
+      <script src="auth.js"></script>
     </div>
     <h1 class="large text-primary">Sign In</h1>
     <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
       <form
         id="loginForm"
         class="form"
-        action="http://localhost:8080/user"
-        method="POST"
+        onsubmit="login(email, password)"
+        
       >
         <div class="form-group">
           <input
@@ -53,7 +54,7 @@
         <div class="form-group">
           <input type="password" placeholder="Password" name="password" />
         </div>
-        <button class="btn btn-primary">Login</button>
+        <input type="submit" value="login" class="btn btn-primary"></input>
       </form>
       <p class="my-1">
         Don't have an account? <a href="register.html">Sign Up</a>

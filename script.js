@@ -1,6 +1,3 @@
-
-
-
 const video = document.getElementById("video");
 const TESTER = document.getElementById("tester");
 const canvasDiv = document.getElementById("canvasDiv");
@@ -14,25 +11,47 @@ Promise.all([
   faceapi.nets.ageGenderNet.loadFromUri("/models")
 ]).then(startVideo);
 
-async function startVideo() {
+var token = localStorage.getItem("token");
 
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+
+let myFirstPromise = new Promise((resolve, reject) => {
+  // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
+  // In this example, we use setTimeout(...) to simulate async code.
+  // In reality, you will probably be using something like XHR or an HTML5 API.
+  setTimeout(function() {
+    if (!token) resolve("Success!"); // Yay! Everything went well!
+  }, 50);
+});
+
+myFirstPromise.then(successMessage => {
+  // successMessage is whatever we passed in the resolve(...) function above.
+  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+  console.log(token);
+});
+
+async function startVideo() {
   // const response = await fetch("./descriptors.json");
   // const myJson = await response.json();
   // console.log(myJson)
   // var newLabeledFaceDescriptors = myJson.map(x =>
   //   faceapi.LabeledFaceDescriptors.fromJSON(x)
   // );
-  let response = await axios.get('http://localhost:8080/get')
-  let val = Object.values(response.data)
+  let response = await axios.get("http://localhost:8080/get");
+  let val = Object.values(response.data);
   let newLabeledFaceDescriptors = [];
   await val.forEach(async x => {
     let array = x.descriptors;
-    let inputArray = []
+    let inputArray = [];
     await array.forEach(element => {
-      inputArray.push(new Float32Array(element))
-    })
-    newLabeledFaceDescriptors.push(new faceapi.LabeledFaceDescriptors(x.label, inputArray))
-  })
+      inputArray.push(new Float32Array(element));
+    });
+    newLabeledFaceDescriptors.push(
+      new faceapi.LabeledFaceDescriptors(x.label, inputArray)
+    );
+  });
   faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
   // faceMatcher = new faceapi.FaceMatcher(newLabeledFaceDescriptors, 0.6);
   navigator.getUserMedia(

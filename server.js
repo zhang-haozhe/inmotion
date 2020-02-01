@@ -37,18 +37,18 @@ let value = null;
 app.post("/descriptor", (req, res) => {
   let descriptor = req.body;
   console.log(descriptor);
-})
+  //console.log(res.body);
+});
 
-app.get('/get', (req, res) => {
+app.get("/get", (req, res) => {
   console.log(value);
   res.send(value);
 });
 
-app.post('/user', (req, res) => {
-  console.log(req.body)
-})
-
-app.listen(port, () => {
-  console.log('server start');
+app.post("/user", (req, res) => {
+  console.log(req.body);
 });
 
+app.listen(port, () => {
+  console.log("server start");
+});
