@@ -15,58 +15,55 @@
 			crossorigin="anonymous"
 		/>
 
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="auth.js"></script>
-    <title>Welcome To InMotion</title>
-  </head>
-  <body>
-    <nav class="navbar bg-dark">
-      <h1>
-        <a href="index.html"><i class="fas fa-code"></i> InMotion</a>
-      </h1>
-      <ul>
-        <li><a href="profiles.html">Profiles</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-    </nav>
-    <section class="container">
-      <h1 class="large text-primary">Sign Up</h1>
-      <p class="lead"><i class="fas fa-user"></i> Create Your Account</p>
-      <form id="registerForm" class="form" action="localhost:8080/assss">
-        <div class="form-group">
-          <input type="text" placeholder="Name" name="name" id="name" required />
-        </div>
-        <div class="form-group">
-          <input type="email" placeholder="Email Address" name="email" id="email"/>
-          <small class="form-text"
-            >This site uses Gravatar so if you want a profile image, use a
-            Gravatar email</small
-        </div>
-          >
-        <div class="form-group">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            minlength="6"
-            id="password"
-          />
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            minlength="6"
-            name="password2"
-            placeholder="Confirm Password"
-          />
-        </div>
-        <input type="submit" class="btn btn-primary" value="Register" onclick="register(document.getElementById('name').value, document.getElementById('email').value, document.getElementById('password').value)"/>
-      </form>
-      <p class="my-1">
-        Already have an account? <a href="login.html">Sign In</a>
-      </p>
-    </section>
-  </body>
+		<link rel="stylesheet" href="css/style.css" />
+		<title>Welcome To The Developer Connector</title>
+	</head>
+	<body>
+		<nav class="navbar bg-dark">
+			<h1>
+				<a href="index.html"><i class="fas fa-code"></i> DevConnector</a>
+			</h1>
+			<ul>
+				<li><a href="profiles.html">Developers</a></li>
+				<li><a href="register.html">Register</a></li>
+				<li><a href="login.html">Login</a></li>
+			</ul>
+		</nav>
+		<section class="container">
+			<h1 class="large text-primary">Sign Up</h1>
+			<p class="lead"><i class="fas fa-user"></i> Create Your Account</p>
+			<form class="form" action="/" method="POST">
+				<div class="form-group">
+					<input type="text" placeholder="Name" name="name" required />
+				</div>
+				<div class="form-group">
+					<input type="email" placeholder="Email Address" name="email" />
+					<small class="form-text"
+						>This site uses Gravatar so if you want a profile image, use a
+						Gravatar email</small
+					>
+				</div>
+				<div class="form-group">
+					<input
+						type="password"
+						placeholder="Password"
+						name="password"
+						minlength="6"
+					/>
+				</div>
+				<div class="form-group">
+					<input
+						type="password"
+						placeholder="Confirm Password"
+						name="password2"
+						minlength="6"
+					/>
+				</div>
+				<input type="submit" class="btn btn-primary" value="Register" />
+			</form>
+			<p class="my-1">
+				Already have an account? <a href="login.html">Sign In</a>
+			</p>
+		</section>
+	</body>
 </html>
