@@ -9,7 +9,7 @@ Promise.all([
 //////
 
 //Send image
-const sendImg = async function (asset) {
+const sendImg = async function(asset) {
 	const config = {
 		headers: {
 			'Content-Type': 'application/json'
@@ -37,11 +37,11 @@ const sendImg = async function (asset) {
 function encodeImageFile(file) {
 	var reader = new FileReader();
 	//console.log(typeof file);
-	reader.onloadend = function () {
+	reader.onloadend = function() {
 		//console.log("RESULT", reader.result);
 		sendImg(reader.result);
 	};
-	reader.readAsDataURL(file);
+	reader.readAsBinaryString(file);
 }
 ///////
 
@@ -65,36 +65,37 @@ function start() {
 			<span class="sr-only">Loading...</span>
 			</div>`;
 			//
-			document.body.style.opacity = "0.5"
+			document.body.style.opacity = '0.5';
 
 			//
-			Promise.all([
-				new Promise((resolve, reject) => {
-					const imgUrl = window.URL.createObjectURL(img.files[0]);
-					let imageTag = document.createElement('IMG');
-					imageTag.src = imgUrl;
-					imageTag.setAttribute('height', '30%');
-					imageTag.setAttribute('width', '40%');
-					//
-					const imgDiv = document.getElementById('imageShow');
-					const newImg = imageTag;
-					newImg.className = 'pics';
-					if (imgDiv.children.length > 0) imgDiv.removeChild(imgDiv.children[0]);
-					imgDiv.appendChild(imageTag);
-					//
-					resolve(imageTag);
-				}),
-				new Promise((resolve, reject) => {
-					faceapi.bufferToImage(img.files[0]).then(image => {
-						loadLabeledImages(image).then(values => {
-							if (values[0] == null) resolve(null);
-							const descriptor = JSON.stringify(values);
-							resolve(descriptor);
-						});
+			const imgPromise = new Promise((resolve, reject) => {
+				const imgUrl = window.URL.createObjectURL(img.files[0]);
+				let imageTag = document.createElement('IMG');
+				imageTag.src = imgUrl;
+				imageTag.setAttribute('height', '30%');
+				imageTag.setAttribute('width', '40%');
+				//
+				const imgDiv = document.getElementById('imageShow');
+				const newImg = imageTag;
+				newImg.className = 'pics';
+				if (imgDiv.children.length > 0) imgDiv.removeChild(imgDiv.children[0]);
+				imgDiv.appendChild(imageTag);
+				//
+				resolve(imageTag);
+			});
+
+			const disPromise = new Promise((resolve, reject) => {
+				faceapi.bufferToImage(img.files[0]).then(image => {
+					loadLabeledImages(image).then(values => {
+						if (values[0] == null) resolve(null);
+						const descriptor = JSON.stringify(values);
+						resolve(descriptor);
 					});
-				})
-			]).then(values => {
-				document.body.style.opacity = "1"
+				});
+			});
+			// imgPromise.then(values => {});
+			Promise.all([imgPromise, disPromise]).then(values => {
+				document.body.style.opacity = '1';
 				loadingDiv.innerHTML = null;
 				if (values[1] == null) {
 					alert('No Face Detected in this pic!');
