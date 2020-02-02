@@ -64,6 +64,10 @@ function start() {
 			loadingDiv.innerHTML = `<div class="spinner-border" role="status">
 			<span class="sr-only">Loading...</span>
 			</div>`;
+			//
+			document.body.style.opacity = "0.5"
+
+			//
 			Promise.all([
 				new Promise((resolve, reject) => {
 					const imgUrl = window.URL.createObjectURL(img.files[0]);
@@ -90,6 +94,7 @@ function start() {
 					});
 				})
 			]).then(values => {
+				document.body.style.opacity = "1"
 				loadingDiv.innerHTML = null;
 				if (values[1] == null) {
 					alert('No Face Detected in this pic!');
