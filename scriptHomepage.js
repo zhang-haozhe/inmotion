@@ -9,7 +9,7 @@ Promise.all([
 //////
 
 //Send image
-const sendImg = async function(asset) {
+const sendImg = async function (asset) {
 	const config = {
 		headers: {
 			'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ const sendImg = async function(asset) {
 function encodeImageFile(file) {
 	var reader = new FileReader();
 	//console.log(typeof file);
-	reader.onloadend = function() {
+	reader.onloadend = function () {
 		//console.log("RESULT", reader.result);
 		sendImg(reader.result);
 	};
@@ -56,7 +56,10 @@ function start() {
 
 	if (img) {
 		img.addEventListener('change', async () => {
+			//send pic
 			encodeImageFile(img.files[0]);
+			//load pic
+			///////////////////
 			let loadingDiv = document.getElementById('loading');
 			loadingDiv.innerHTML = `<div class="spinner-border" role="status">
 			<span class="sr-only">Loading...</span>
@@ -68,6 +71,13 @@ function start() {
 					imageTag.src = imgUrl;
 					imageTag.setAttribute('height', '30%');
 					imageTag.setAttribute('width', '40%');
+					//
+					const imgDiv = document.getElementById('imageShow');
+					const newImg = imageTag;
+					newImg.className = 'pics';
+					if (imgDiv.children.length > 0) imgDiv.removeChild(imgDiv.children[0]);
+					imgDiv.appendChild(imageTag);
+					//
 					resolve(imageTag);
 				}),
 				new Promise((resolve, reject) => {
@@ -86,12 +96,8 @@ function start() {
 					return;
 				}
 				//image
-				//console.log(values[0]);
-				const imgDiv = document.getElementById('imageShow');
-				const newImg = values[0];
-				newImg.className = 'pics';
-				if (imgDiv.children.length > 0) imgDiv.removeChild(imgDiv.children[0]);
-				imgDiv.appendChild(values[0]);
+				console.log(values[0]);
+
 				//descriptor
 				sessionStorage.setItem('descriptor', values[1]);
 			});
