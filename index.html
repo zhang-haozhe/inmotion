@@ -1,71 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<!-- Bootstrap CSS -->
+		<link
+			rel="icon"
+			href="https://github.com/LeChn/hackduke2019/blob/master/favicon.png?raw=true"
+		/>
+		<link rel="stylesheet" type="text/css" href="theme.css" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Quicksand&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="css/style.css" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+			integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+			crossorigin="anonymous"
+		/>
+		<title>InMotion - An Insight into Your Emotions</title>
 
-  <!-- Bootstrap CSS -->
-  <link rel="icon" href="https://github.com/LeChn/hackduke2019/blob/master/favicon.png?raw=true" />
-  <link rel="stylesheet" type="text/css" href="theme.css" />
-  <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Quicksand&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <title>InMotion - An Insight into Your Emotions</title>
-  
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<nav class="navbar bg-dark">
-  <h1>
-    <a href="index.html"><i class="fas fa-code"></i> InMotion</a>
-  </h1>
-  <ul>
-    <li><a href="register.html">Register</a></li>
-    <li><a href="login.html">Login</a></li>
-  </ul>
-</nav>
-<body>
-  <h1 class="centeredTop"
-    style=" font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 4em; ">
-    <span style="color:cornflowerblue">I</span>n<span style="color:cornflowerblue">M</span>otion
-  </h1>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<nav class="navbar bg-dark">
+		<h1>
+			<a href="index.html"><i class="fas fa-code"></i> InMotion</a>
+		</h1>
+		<ul>
+			<li><a href="register.html">Register</a></li>
+			<li><a href="login.html">Login</a></li>
+		</ul>
+	</nav>
+	<body>
+		<h1
+			class="centeredTop"
+			style=" font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 4em; "
+		>
+			<span style="color:cornflowerblue">I</span>n<span
+				style="color:cornflowerblue"
+				>M</span
+			>otion
+		</h1>
 
-  <title>InMotion - An Insight into Your Emotions</title>
-  </head>
+		<h2
+			class="centered"
+			style=" text-align: center;   color: black; font-family: 'Quicksand', sans-serif; font-size: 1.5em; font-weight: 600; "
+		>
+			Select your protagonist!
+		</h2>
+		<!-- <div class="card-group centeredBot">
+			<div class="card">
+				<img class="card-img-top" src="img/kevin.jpg" alt="Card image cap" />
+				<div class="card-body">
+					<h5 class="card-title">Tall Guy</h5>
+				</div>
+			</div>
+			<div class="card">
+				<img class="card-img-top" src="img/trump.jpg" alt="Card image cap" />
+				<div class="card-body">
+					<h5 class="card-title">Inflammatory Language</h5>
+				</div>
+			</div>
+			<div class="card">
+				<img class="card-img-top" src="img/ellen.jpg" alt="Card image cap" />
+				<div class="card-body">
+					<h5 class="card-title">Kind Person</h5>
+				</div>
+			</div>
+			<div class="card">
+				<img
+					class="card-img-top"
+					src="img/ellen.jpg"
+					alt="Card image cap"
+					id="customPic"
+				/>
+				<div class="card-body">
+					<h5 class="card-title">Kind Person</h5>
+				</div>
+			</div>
+		</div> -->
 
-  <h2 class="centered"
-    style=" text-align: center;   color: black; font-family: 'Quicksand', sans-serif; font-size: 1.5em; font-weight: 600; ">
-    An Insight into your emotion
-  </h2>
+		<div class="d-flex justify-content-center pics" id="loading"></div>
 
-  <div class="d-flex justify-content-center pics" id="loading">
+		<div>
+			<div>
+				<input
+					class="centeredBot btn btn-secondary btn-lg"
+					type="file"
+					id="imageUpload"
+				/>
+				<div id="imageShow" style="width:50%; height:50%"></div>
+			</div>
 
-  </div>
+			<a href="video.html"
+				><button
+					style="position: fixed;top:80%; left:46%;"
+					type="button"
+					class="btn btn-success btn-lg"
+				>
+					Demo <i class="fa fa-chevron-circle-right hvr-icon"></i></button
+			></a>
+		</div>
 
-  <div>
-    <div>
-      <input class="centeredBot" type="file" id="imageUpload" />
-      <div id="imageShow" style="width:50%; height:50%"></div>
-    </div>
-
-    <a href="video.html"><button style="position: fixed;top:80%; left:46%;" type="button"
-        class="btn btn-success btn-lg">
-        Demo <i class="fa fa-chevron-circle-right hvr-icon"></i></button></a>
-  </div>
-
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script defer src="face-api.min.js"></script>
-  <script defer type="module" src="./scriptHomepage.js"></script>
-</body>
-
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script defer src="face-api.min.js"></script>
+		<script defer type="module" src="./scriptHomepage.js"></script>
+	</body>
 </html>
