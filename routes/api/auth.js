@@ -8,6 +8,10 @@ const { check, validationResult } = require("express-validator/check");
 
 const User = require("../../dbModels/User");
 
+// @route    GET api/auth
+// @desc     Test route
+// @access   Public
+
 // @route    POST api/auth
 // @desc     Authenticate user & get token
 // @access   Public
@@ -18,7 +22,6 @@ router.post(
     check("password", "Password is required").exists()
   ],
   async (req, res) => {
-    console.log(1)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });

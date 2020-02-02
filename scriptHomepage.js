@@ -26,9 +26,8 @@ const sendImg = async function(asset) {
     //     console.log(response);
     //     // console.log(response.data.token);
     //   });
-    const res = await axios
-      .post("http://localhost:8080/api/img", body, config)
-      .then(response => console.log(response));
+    const res = await axios.post("http://localhost:8080/api/img", body, config);
+    //   .then(response => console.log(response));
   } catch (err) {
     const errors = err.response.data.errors;
     console.log(errors);
@@ -37,9 +36,9 @@ const sendImg = async function(asset) {
 
 function encodeImageFile(file) {
   var reader = new FileReader();
-  console.log(typeof file);
+  //console.log(typeof file);
   reader.onloadend = function() {
-    console.log("RESULT", reader.result);
+    //console.log("RESULT", reader.result);
     sendImg(reader.result);
   };
   reader.readAsDataURL(file);
@@ -82,7 +81,7 @@ function start() {
       ]).then(values => {
         loadingDiv.innerHTML = null;
         //image
-        console.log(values[0]);
+        //console.log(values[0]);
         document.getElementById("imageShow").appendChild(values[0]);
         //descriptor
         sessionStorage.setItem("descriptor", values[1]);
