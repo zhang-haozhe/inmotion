@@ -8,6 +8,7 @@
   <link rel="icon" href="https://github.com/LeChn/hackduke2019/blob/master/favicon.png?raw=true" />
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all" />
   <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Quicksand&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <title>InMotion</title>
   <script src="https://kit.fontawesome.com/2492c9ba58.js" crossorigin="anonymous"></script>
   <script defer src="face-api.min.js"></script>
@@ -21,15 +22,17 @@
 </head>
 
 <body>
-  <input type='file' id="videoUpload">
-  <div class="align-items-center justify-content-center">
-    <div class="container col">
-      <div id="canvasDiv">
-        <video id="video" muted style="border-radius:100px;">
-        </video>
-      </div>
-    </div>
-  </div>
+	<div align="center">
+		<input type='file' id="videoUpload">
+	</div>
+	<div class="align-items-center justify-content-center">
+	<div class="container col">
+		<div id="canvasDiv" align="center">
+		<video id="video" muted style="border-radius:100px;">
+		</video>
+		</div>
+	</div>
+	</div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -50,16 +53,8 @@
     crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-
-  <div class="container-fluid align-items-center justify-content-center"
-    style="font-family: 'Quicksand', sans-serif;background-color: #F8F9F9   ;">
-    <p style="text-align: center;font-weight: bold;">Credits:</p>
-    <p style="text-align: center;">
-      InMotion is proudly provided by five cool Florida Gators: Yanghaoyu
-      Chen, Yichong Ma, Zihan Shu, Haozhe Zhang and Lutong Zhang.
-    </p>
-  </div>
+	crossorigin="anonymous"></script>
+	
 </body>
 <div id="tester"></div>
 

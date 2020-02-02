@@ -81,7 +81,6 @@ function start() {
 				})
 			]).then(values => {
 				loadingDiv.innerHTML = null;
-				debugger;
 				if (values[1] == null) {
 					alert('No Face Detected in this pic!');
 					return;
