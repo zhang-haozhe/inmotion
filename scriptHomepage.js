@@ -6,12 +6,56 @@ Promise.all([
 	faceapi.nets.ageGenderNet.loadFromUri('/models')
 ]).then(start);
 
-//<div class="spinner-border" role="status">
-//<span class="sr-only">Loading...</span>
-//</div>
-function start() {
-	const img = document.getElementById('imageUpload');
+//////
 
+//Send image
+const sendImg = async function(asset) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+      //"Content-Type": "application/text"
+    }
+  };
+
+  const body = JSON.stringify({ image: asset });
+  // console.log(body)
+  try {
+    // const res = await axios
+    //   .post("http://localhost:8080/api/img", body, config)
+    //   .then(response => {
+    //     console.log(response);
+    //     // console.log(response.data.token);
+    //   });
+    const res = await axios
+      .post("http://localhost:8080/api/img", body, config)
+      .then(response => console.log(response));
+  } catch (err) {
+    const errors = err.response.data.errors;
+    console.log(errors);
+  }
+};
+
+function encodeImageFile(file) {
+  var reader = new FileReader();
+  console.log(typeof file);
+  reader.onloadend = function() {
+    console.log("RESULT", reader.result);
+    sendImg(reader.result);
+  };
+  reader.readAsDataURL(file);
+}
+///////
+
+function start() {
+  const img = document.getElementById("imageUpload");
+  var token = document.cookie.substring(6);
+  if (token) {
+    axios.defaults.headers.common["x-auth-token"] = token;
+  } else {
+    delete axios.defaults.headers.common["x-auth-token"];
+  }
+
+      encodeImageFile(img.files[0]);
 	if (img) {
 		img.addEventListener('change', async () => {
 			let loadingDiv = document.getElementById("loading");
