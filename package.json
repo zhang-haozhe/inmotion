@@ -1,24 +1,39 @@
 {
-  "name": "inmotion",
-  "version": "1.0.0",
-  "description": "",
-  "main": "script.js",
-  "dependencies": {
-    "live-server": "^1.2.1"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "start": "live-server .",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LeChn/hackduke2019.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/LeChn/hackduke2019/issues"
-  },
-  "homepage": "https://github.com/LeChn/hackduke2019#readme"
+	"name": "inmotion",
+	"version": "1.0.0",
+	"description": "",
+	"main": "script.js",
+	"dependencies": {
+		"axios": "^0.19.1",
+		"config": "^3.2.5",
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"express-validator": "^6.3.1",
+		"face-api.js": "^0.21.0",
+		"gravatar": "^1.8.0",
+		"jsonwebtoken": "^8.5.1",
+		"live-server": "^1.2.1",
+		"mongoose": "^5.8.11",
+		"node_module": "0.0.0",
+		"path": "^0.12.7",
+		"request": "^2.88.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.2"
+	},
+	"scripts": {
+		"start": "live-server .",
+		"server": "nodemon server",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/LeChn/hackduke2019.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/LeChn/hackduke2019/issues"
+	},
+	"homepage": "https://github.com/LeChn/hackduke2019#readme"
 }
