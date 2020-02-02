@@ -89,6 +89,7 @@ let layout = {
 Plotly.newPlot(TESTER, data, layout);
 
 video.addEventListener('play', () => {
+	console.log('play')
 	let canvas = faceapi.createCanvasFromMedia(video);
 	if (!document.getElementById('vidCanvas')) {
 		canvas.id = 'vidCanvas';
@@ -104,7 +105,7 @@ video.addEventListener('play', () => {
 			.withFaceLandmarks()
 			.withFaceExpressions()
 			.then(detections => {
-				debugger;
+				console.log(1)
 				function update() {
 					let cum = 0;
 					for (let i = 0; i < series.length; i++) {
@@ -143,20 +144,15 @@ video.addEventListener('play', () => {
 					faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 					faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 				} else {
-					debugger;
 					console.log('detections is undefined ');
 				}
-				debugger;
 				detectFrame();
 			})
 			.catch(() => {
-				debugger;
 				console.log('curry');
 			}); //0.1 second per frame
 	};
-	debugger;
 	detectFrame();
-	debugger;
 });
 
 async function compare(detections, displaySize, faceMatcher) {

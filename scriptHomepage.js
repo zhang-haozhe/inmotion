@@ -6,11 +6,18 @@ Promise.all([
 	faceapi.nets.ageGenderNet.loadFromUri('/models')
 ]).then(start);
 
+//<div class="spinner-border" role="status">
+//<span class="sr-only">Loading...</span>
+//</div>
 function start() {
 	const img = document.getElementById('imageUpload');
 
 	if (img) {
 		img.addEventListener('change', async () => {
+			let loadingDiv = document.getElementById("loading");
+			loadingDiv.innerHTML = `<div class="spinner-border" role="status">
+			<span class="sr-only">Loading...</span>
+			</div>`
 			Promise.all([
 				new Promise((resolve, reject) => {
 					const imgUrl = window.URL.createObjectURL(img.files[0]);
@@ -29,6 +36,7 @@ function start() {
 					});
 				})
 			]).then(values => {
+				loadingDiv.innerHTML = null
 				//image
 				console.log(values[0]);
 				document.getElementById('imageShow').appendChild(values[0]);
