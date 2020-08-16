@@ -1,0 +1,8 @@
+# Basic
+/node_modules
+config/
+.DS_Store
+# .gitignore
+
+# Firebase
+Firebase/firebase.js
