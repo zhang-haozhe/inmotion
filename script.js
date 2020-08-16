@@ -3,6 +3,7 @@ const videoUpload = document.getElementById('videoUpload');
 const TESTER = document.getElementById('tester');
 const canvasDiv = document.getElementById('canvasDiv');
 // var theUser = document.getElementById('currentUser').value;
+var appearToBeElement = document.getElementById('appearToBeText');
 let faceMatcher = null;
 var expressionCollection = [];
 var landmarksCollection = [];
@@ -201,6 +202,42 @@ async function compare(detections, displaySize, faceMatcher) {
 }
 
 function firebaseUpdate(detections) {
+  //Updates the text
+  let expressionsArray = [
+    detections.expressions.neutral,
+    detections.expressions.happy,
+    detections.expressions.surprised,
+    detections.expressions.sad,
+    detections.expressions.angry,
+    detections.expressions.fearful,
+    detections.expressions.disgusted,
+  ];
+  let biggestVal = expressionsArray.indexOf(Math.max(...expressionsArray));
+  switch (biggestVal) {
+    case 0:
+      appearToBeElement.innerHTML = 'You appear to be neutral';
+      break;
+    case 1:
+      appearToBeElement.innerHTML = 'You appear to be happy';
+      break;
+    case 2:
+      appearToBeElement.innerHTML = 'You appear to be surprised';
+      break;
+    case 3:
+      appearToBeElement.innerHTML = 'You appear to be sad';
+      break;
+    case 4:
+      appearToBeElement.innerHTML = 'You appear to be angry';
+      break;
+    case 5:
+      appearToBeElement.innerHTML = 'You appear to be fearful';
+      break;
+
+    default:
+      appearToBeElement.innerHTML = 'You appear to be disgusted';
+      break;
+  }
+
   //Firebase module
 
   //send the extracted info and initialize the arrays for every 100 frames
@@ -209,6 +246,7 @@ function firebaseUpdate(detections) {
       JSON.stringify({
         neutral: detections.expressions.neutral,
         happy: detections.expressions.happy,
+        surprised: detections.expressions.surprised,
         sad: detections.expressions.sad,
         angry: detections.expressions.angry,
         fearful: detections.expressions.fearful,
@@ -227,6 +265,7 @@ function firebaseUpdate(detections) {
     JSON.stringify({
       neutral: detections.expressions.neutral,
       happy: detections.expressions.happy,
+      surprised: detections.expressions.surprised,
       sad: detections.expressions.sad,
       angry: detections.expressions.angry,
       fearful: detections.expressions.fearful,
