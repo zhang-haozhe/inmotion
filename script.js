@@ -204,9 +204,6 @@ function firebaseUpdate(detections) {
 	//Updates the text
 	let expressions = detections.expressions;
 
-	Object.keys(expressions).reduce((a, b) =>
-		expressions[a] > expressions[b] ? a : b
-	);
 	// index of the emotion with the largest probability
 	let repExp = Object.keys(expressions).reduce((a, b) =>
 		expressions[a] > expressions[b] ? a : b
@@ -242,7 +239,7 @@ function sendStuffToFirebase() {
 		.collection(count.toString())
 		.doc('data')
 		.set(objectToPush)
-		.then(() => console.log('Saved to DB'))
+		.then(() => console.log('Saved to DB at frame ' + numDetections))
 		.catch((error) => {
 			console.warn(error);
 		});
