@@ -4,4 +4,4 @@ config/
 .DS_Store
 # .gitignore
 
-# Firebase
+/Firebase
