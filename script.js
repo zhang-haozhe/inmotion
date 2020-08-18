@@ -2,15 +2,15 @@ const video = document.getElementById('video');
 const videoUpload = document.getElementById('videoUpload');
 const TESTER = document.getElementById('tester');
 const canvasDiv = document.getElementById('canvasDiv');
-// var theUser = document.getElementById('currentUser').value;
-var appearToBeElement = document.getElementById('appearToBeText');
+let appearToBeElement = document.getElementById('appearToBeText');
 let faceMatcher = null;
-var expressionCollection = [];
-var landmarksCollection = [];
-var numDetections = 0;
+let expressionCollection = [];
+let landmarksCollection = [];
+let numDetections = 0;
 let count = 0;
-var videoName = '';
-var index = 0;
+let videoName = '';
+let index = 0;
+let start = Date.now();
 
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -185,6 +185,7 @@ videoSelection
 				}); //0.1 second per frame
 		};
 		// begin inference
+		start = Date.now();
 		detectFrame();
 	})
 	.catch((error) => {
@@ -201,7 +202,7 @@ function firebaseUpdate(detections) {
 	);
 	appearToBeElement.innerHTML = 'You appear to be ' + repExp;
 
-	expressions.timeFrame = Date.now();
+	expressions.timeFrame = (Date.now() - start) / 1000;
 	expressionCollection.push(JSON.stringify(expressions));
 	numDetections++;
 
