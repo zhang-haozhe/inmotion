@@ -2,7 +2,8 @@ const video = document.getElementById('video');
 const videoUpload = document.getElementById('videoUpload');
 const TESTER = document.getElementById('tester');
 const canvasDiv = document.getElementById('canvasDiv');
-let appearToBeElement = document.getElementById('appearToBeText');
+let appearElement = document.getElementById('appear');
+let actuallyElement = document.getElementById('actually');
 let faceMatcher = null;
 let expressionCollection = [];
 let landmarksCollection = [];
@@ -63,16 +64,28 @@ const expr = [
 	'fearful',
 	'disgusted',
 ];
+const weight = [5, 1, 10, 10, 10, 10, 10];
+const color = [
+	'DodgerBlue',
+	'Orange',
+	'MediumSeaGreen',
+	'Tomato',
+	'SlateBlue',
+	'Gray',
+	'Violet',
+];
 const series = [];
 for (i = 0; i < expr.length; i++) {
 	series[i] = [];
 }
 
+// initiate animation coefficients
 for (i = 0; i < n; i++) {
-	x[i] = i + 1;
-	y[i] = 0;
+	x[i] = i + 1; // x takes values from 1 to n
+	y[i] = 0; // y takes values of 0
+	// fill expression matrix with 7 by n zeros
 	series.forEach((element) => {
-		element[i] = 0;
+		element[i] = 0; // zero out a column of 7 numbers
 	});
 }
 
@@ -87,7 +100,7 @@ for (let i = 0; i < series.length; i++) {
 	};
 }
 let layout = {
-	title: 'Emotion Real-time Diagram',
+	title: 'Instantaneous Emotion Inference Diagram',
 	showlegend: true,
 	yaxis: { range: [0, 1] },
 };
@@ -132,16 +145,35 @@ videoSelection
 						firstPlay = false;
 					}
 					function update() {
-						let cum = 0;
+						let accum = 0;
 						index++;
+						// prep the expression arrays
 						for (let i = 0; i < series.length; i++) {
-							cum += detections.expressions[expr[i]];
-							series[i].push(cum);
+							accum += detections.expressions[expr[i]];
+							series[i].push(accum);
 							series[i].shift();
 						}
 						for (let i = 0; i < series.length; i++) {
 							updatedData[i] = { y: series[i] };
 						}
+
+						// calculate area of expressions
+						let areas = [];
+						series.forEach((element, idx) => {
+							areas[idx] = element.slice(-100).reduce((a, b) => a + b, 0); // sum of last 10
+						});
+						// subtract area trick
+						for (let k = series.length - 1; k > 0; k--) {
+							areas[k] = areas[k] - areas[k - 1];
+						}
+						// weighted area
+						for (let k = 0; k < series.length; k++) {
+							areas[k] = areas[k] * weight[k];
+						}
+						let maxAreaIndex = areas.indexOf(Math.max(...areas));
+						actuallyElement.innerHTML = 'actually ' + expr[maxAreaIndex];
+						actuallyElement.style = 'color:' + color[maxAreaIndex];
+
 						Plotly.animate(
 							TESTER,
 							{
@@ -157,6 +189,8 @@ videoSelection
 								},
 							}
 						);
+
+						// firestore
 						firebaseUpdate(detections);
 					}
 					if (detections != undefined) {
@@ -200,7 +234,8 @@ function firebaseUpdate(detections) {
 	let repExp = Object.keys(expressions).reduce((a, b) =>
 		expressions[a] > expressions[b] ? a : b
 	);
-	appearToBeElement.innerHTML = 'You appear to be ' + repExp;
+	appearElement.innerHTML = 'appear to be ' + repExp;
+	appearElement.style = 'color:' + color[expr.indexOf(repExp)];
 
 	expressions.timeFrame = (Date.now() - start) / 1000;
 	expressionCollection.push(JSON.stringify(expressions));

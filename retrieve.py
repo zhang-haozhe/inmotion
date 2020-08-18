@@ -29,7 +29,7 @@ for vid in db.collection(u'Emotion').stream():
         doc = doc_ref.get()
         if not doc.exists:
             break
-        print(doc.id, count)
+        print(vid, count)
         dic = doc.to_dict()
         for i in dic["detections"]:
             expressions = json.loads(i)
