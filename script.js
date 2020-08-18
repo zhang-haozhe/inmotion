@@ -145,35 +145,6 @@ videoSelection
 						firstPlay = false;
 					}
 					function update() {
-						let accum = 0;
-						index++;
-						// prep the expression arrays
-						for (let i = 0; i < series.length; i++) {
-							accum += detections.expressions[expr[i]];
-							series[i].push(accum);
-							series[i].shift();
-						}
-						for (let i = 0; i < series.length; i++) {
-							updatedData[i] = { y: series[i] };
-						}
-
-						// calculate area of expressions
-						let areas = [];
-						series.forEach((element, idx) => {
-							areas[idx] = element.slice(-100).reduce((a, b) => a + b, 0); // sum of last 10
-						});
-						// subtract area trick
-						for (let k = series.length - 1; k > 0; k--) {
-							areas[k] = areas[k] - areas[k - 1];
-						}
-						// weighted area
-						for (let k = 0; k < series.length; k++) {
-							areas[k] = areas[k] * weight[k];
-						}
-						let maxAreaIndex = areas.indexOf(Math.max(...areas));
-						actuallyElement.innerHTML = 'actually ' + expr[maxAreaIndex];
-						actuallyElement.style = 'color:' + color[maxAreaIndex];
-
 						Plotly.animate(
 							TESTER,
 							{
@@ -194,6 +165,7 @@ videoSelection
 						firebaseUpdate(detections);
 					}
 					if (detections != undefined) {
+						analysis(detections);
 						requestAnimationFrame(update);
 						console.log('detection updated');
 						const resizedDetections = faceapi.resizeResults(
@@ -225,6 +197,37 @@ videoSelection
 	.catch((error) => {
 		console.log(error);
 	});
+
+function analysis(detections) {
+	let accum = 0;
+	index++;
+	// prep the expression arrays
+	for (let i = 0; i < series.length; i++) {
+		accum += detections.expressions[expr[i]];
+		series[i].push(accum);
+		series[i].shift();
+	}
+	for (let i = 0; i < series.length; i++) {
+		updatedData[i] = { y: series[i] };
+	}
+
+	// calculate area of expressions
+	let areas = [];
+	series.forEach((element, idx) => {
+		areas[idx] = element.slice(-100).reduce((a, b) => a + b, 0); // sum of last 10
+	});
+	// subtract area trick
+	for (let k = series.length - 1; k > 0; k--) {
+		areas[k] = areas[k] - areas[k - 1];
+	}
+	// weighted area
+	for (let k = 0; k < series.length; k++) {
+		areas[k] = areas[k] * weight[k];
+	}
+	let maxAreaIndex = areas.indexOf(Math.max(...areas));
+	actuallyElement.innerHTML = 'actually ' + expr[maxAreaIndex];
+	actuallyElement.style = 'color:' + color[maxAreaIndex];
+}
 
 // write to firestore database
 function firebaseUpdate(detections) {
