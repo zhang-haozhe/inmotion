@@ -189,52 +189,74 @@ videoSelection
 		detectFrame();
 	})
 	.catch((error) => {
-		console.log(error);
+		console.warn(error);
 	});
 
 // write to firestore database
-function firebaseUpdate(detections) {
-	let expressions = detections.expressions;
+var firebaseUpdate = function (detections) {
+	return new Promise((resolve, reject) => {
+		try {
+			let expressions = detections.expressions;
 
-	// index of the emotion with the largest probability
-	let repExp = Object.keys(expressions).reduce((a, b) =>
-		expressions[a] > expressions[b] ? a : b
-	);
-	appearToBeElement.innerHTML = 'You appear to be ' + repExp;
+			// index of the emotion with the largest probability
+			let repExp = Object.keys(expressions).reduce((a, b) =>
+				expressions[a] > expressions[b] ? a : b
+			);
+			appearToBeElement.innerHTML = 'You appear to be ' + repExp;
 
-	expressions.timeFrame = (Date.now() - start) / 1000;
-	expressionCollection.push(JSON.stringify(expressions));
-	numDetections++;
+			expressions.timeFrame = (Date.now() - start) / 1000;
+			expressionCollection.push(JSON.stringify(expressions));
+			numDetections++;
 
-	//Firebase module
+			//Firebase module
 
-	//send the extracted info and initialize the arrays for every 10 frame
-	if (index % 10 == 0) {
-		sendStuffToFirebase();
-		count++;
-		expressionCollection = [];
-	}
-	//Firebase module ends
+			//send the extracted info and initialize the arrays for every 10 frame
+			if (index % 10 == 0) {
+				sendStuffToFirebase();
+				count++;
+				expressionCollection = [];
+			}
+			//Firebase module ends
+		}
+		catch (error) {
+			reject(error)
+		}
+		finally {
+			resolve("Firebase updated")
+		}
+	}).catch(error => console.warn(error))
+
 }
 
-function sendStuffToFirebase() {
-	objectToPush = {
-		name: videoName,
-		detections: expressionCollection,
-		numDetections: numDetections,
-	};
-	// Pushes video name, expression data, number of frames, time stamps for each frame (and landmarks)
-	firebase
-		.firestore()
-		.collection('Emotion')
-		.doc(videoName)
-		.collection(count.toString())
-		.doc('data')
-		.set(objectToPush)
-		.then(() => console.log('Saved to DB at frame ' + numDetections))
-		.catch((error) => {
-			console.warn(error);
-		});
+var sendStuffToFirebase = () => {
+	return new Promise((resolve, reject) => {
+		try {
+			objectToPush = {
+				name: videoName,
+				detections: expressionCollection,
+				numDetections: numDetections,
+			};
+			// Pushes video name, expression data, number of frames, time stamps for each frame (and landmarks)
+			firebase
+				.firestore()
+				.collection('Emotion')
+				.doc(videoName)
+				.collection(count.toString())
+				.doc('data')
+				.set(objectToPush)
+				.then(() => console.log('Saved to DB at frame ' + numDetections))
+				.catch((error) => {
+					console.warn(error);
+				});
+		}
+		catch (error) {
+			reject(error)
+		}
+		finally {
+			resolve("Sent to Firebase")
+		}
+	}).catch(error => console.warn(error))
+
 }
 
 // Triggered once the video ends
