@@ -110,6 +110,16 @@ videoSelection
 		faceapi.matchDimensions(canvas, displaySize);
 		let firstPlay = true;
 
+		// add field name to enable document query
+		firebase
+			.firestore()
+			.collection('Emotion')
+			.doc(videoName)
+			.set({ name: videoName })
+			.then(() => console.log('added'))
+			.catch((error) => console.warn(error));
+
+		// method to be looped
 		detectFrame = () => {
 			faceapi
 				.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
@@ -123,11 +133,7 @@ videoSelection
 					}
 					function update() {
 						let cum = 0;
-
 						index++;
-
-						firebaseUpdate(detections);
-
 						for (let i = 0; i < series.length; i++) {
 							cum += detections.expressions[expr[i]];
 							series[i].push(cum);
@@ -151,6 +157,7 @@ videoSelection
 								},
 							}
 						);
+						firebaseUpdate(detections);
 					}
 					if (detections != undefined) {
 						requestAnimationFrame(update);
@@ -177,31 +184,15 @@ videoSelection
 					console.log('error');
 				}); //0.1 second per frame
 		};
+		// begin inference
 		detectFrame();
 	})
 	.catch((error) => {
 		console.log(error);
 	});
 
-async function compare(detections, displaySize, faceMatcher) {
-	const resizedDetections = faceapi.resizeResults(detections, displaySize);
-	const results = resizedDetections.map((d) =>
-		faceMatcher.findBestMatch(d.descriptor)
-	);
-
-	let index = 0;
-	let dis = 1;
-	await results.forEach((result, i) => {
-		if (result._distance < dis) {
-			dis = result._distance;
-			index = i;
-		}
-	});
-	return [index, dis, results[0].label];
-}
-
+// write to firestore database
 function firebaseUpdate(detections) {
-	//Updates the text
 	let expressions = detections.expressions;
 
 	// index of the emotion with the largest probability

@@ -1,7 +1,9 @@
-# Basic
-/node_modules
-config/
-.DS_Store
-# .gitignore
+Firebase/
 
-/Firebase
+node_modules/
+
+.vscode/
+
+.DS_Store
+
+*.csv
