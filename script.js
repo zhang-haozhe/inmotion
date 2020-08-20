@@ -2,7 +2,7 @@ const video = document.getElementById('video');
 const videoUpload = document.getElementById('videoUpload');
 const TESTER = document.getElementById('tester');
 const canvasDiv = document.getElementById('canvasDiv');
-let appearToBeElement = document.getElementById('appearToBeText');
+let appearElement = document.getElementById('appear');
 let faceMatcher = null;
 let expressionCollection = [];
 let landmarksCollection = [];
@@ -201,7 +201,7 @@ var firebaseUpdate = async function (detections) {
 	let repExp = Object.keys(expressions).reduce((a, b) =>
 		expressions[a] > expressions[b] ? a : b
 	);
-	appearToBeElement.innerHTML = 'You appear to be ' + repExp;
+	appearElement.innerHTML = 'You appear to be ' + repExp;
 
 	expressions.timeFrame = (Date.now() - start) / 1000;
 	expressionCollection.push(JSON.stringify(expressions));
@@ -216,10 +216,6 @@ var firebaseUpdate = async function (detections) {
 		expressionCollection = [];
 	}
 	//Firebase module ends
-
-
-
-
 }
 
 var sendStuffToFirebase = async () => {
@@ -241,10 +237,6 @@ var sendStuffToFirebase = async () => {
 		.catch((error) => {
 			console.warn(error);
 		});
-
-
-
-
 }
 
 // Triggered once the video ends

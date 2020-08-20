@@ -8,7 +8,8 @@
   <link rel="icon" href="https://github.com/LeChn/inmotion/blob/master/img/favicon.png?raw=true" />
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all" />
   <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Quicksand&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <title>InMotion</title>
   <script src="https://kit.fontawesome.com/2492c9ba58.js" crossorigin="anonymous"></script>
   <script defer src="node_modules/face-api.js/dist/face-api.min.js"></script>
@@ -16,9 +17,6 @@
   <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
   <script src="Firebase/firebase.js"></script>
-  <script id="currentUser">
-    const user = firebase.auth().currentUser;
-  </script>
   <script defer type="text/javascript" src="script.js"></script>
   <script src="node_modules/plotly.js/dist/plotly.min.js"></script>
   <style>
@@ -29,19 +27,19 @@
 </head>
 
 <body>
-	<div align="center">
-		<input type='file' id="videoUpload">
-	</div>
-	<div class="align-items-center justify-content-center">
-	<div class="container col">
-		<div id="canvasDiv" align="center">
-			<video id="video" style="width:50%" poster="/img/emotion.gif"></video>
-      <p id="appearToBeText"> you appear to be </p>
-      <!-- <img id="appearToBe" /> -->
-			<p> but you're actually </p>
-		</div>
-	</div>
-	</div>
+  <div align="center">
+    <input type='file' id="videoUpload">
+  </div>
+  <div class="align-items-center justify-content-center">
+    <div class="container col">
+      <div id="canvasDiv" align="center">
+        <video id="video" style="width:50%" poster="/img/emotion.gif"></video>
+        <p id="appear"> you appear to be </p>
+        <!-- <img id="appearToBe" /> -->
+        <p> but you're actually </p>
+      </div>
+    </div>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -62,9 +60,9 @@
     crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-  crossorigin="anonymous"></script>
- 
-  
+    crossorigin="anonymous"></script>
+
+
 </body>
 <div id="tester"></div>
 
