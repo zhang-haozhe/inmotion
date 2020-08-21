@@ -24,17 +24,12 @@ async function startVideo() {
 	return;
 }
 
-video.addEventListener('play', () => {
-	console.log('hi');
-});
-
 let videoSelection = new Promise((resolve, reject) => {
 	cam.addEventListener('click', () => {
 		navigator.mediaDevices
 			.getUserMedia({ video: {} })
 			.then((stream) => {
 				video.srcObject = stream;
-				video.play();
 			})
 			.catch((err) => console.error(err));
 		setTimeout(() => {
