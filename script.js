@@ -12,18 +12,14 @@ let numDetections = 0;
 let count = 0;
 let videoName = '';
 let index = 0;
-let start = Date.now()
-let isCam = false
+let start = Date.now();
+let isCam = false;
 
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
 	faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
 	faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-]).then(startVideo);
-
-async function startVideo() {
-	return;
-}
+]).then(console.log('models loaded'));
 
 let videoSelection = new Promise((resolve, reject) => {
 	cam.addEventListener('click', () => {
@@ -33,18 +29,21 @@ let videoSelection = new Promise((resolve, reject) => {
 				video.srcObject = stream;
 			})
 			.catch((err) => console.error(err));
-		setTimeout(() => {
-			firebase
-				.firestore()
-				.collection('Webcam')
-				.doc(start.toString())
-				.set({ name: start.toString() })
-				.then(() => console.log('Cam name added'))
-				.catch((error) => console.warn(error));
-			isCam = true
-			console.log(start)
-			resolve();
-		}, 3000);
+		video.addEventListener(
+			'loadeddata',
+			() => {
+				firebase
+					.firestore()
+					.collection('Webcam')
+					.doc(start.toString())
+					.set({ name: start.toString() })
+					.then(() => console.log('Cam name added'))
+					.catch((error) => console.warn(error));
+				isCam = true;
+				resolve();
+			},
+			false
+		);
 	});
 	videoUpload.addEventListener('change', () => {
 		if (videoUpload) {
@@ -202,7 +201,6 @@ videoSelection
 				}); //0.1 second per frame
 		};
 		// begin inference
-		// start = Date.now();
 		detectFrame();
 	})
 	.catch((error) => {
@@ -291,8 +289,7 @@ async function sendStuffToFirebase() {
 				console.warn(error);
 			});
 	} else {
-		if (count == 0)
-			console.log(start)
+		if (count == 0) console.log(start);
 		objectToPush = {
 			name: start.toString(),
 			detections: expressionCollection,
@@ -311,11 +308,3 @@ async function sendStuffToFirebase() {
 			});
 	}
 }
-
-// Triggered once the video ends
-// document.getElementById('video').addEventListener('ended', myHandler, false);
-// function myHandler(e) {
-//   // When the vid ends, sends the data of emotions and landmarks to the database
-//   console.log('video ended');
-//   sendStuffToFirebase();
-// }
