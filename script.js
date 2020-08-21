@@ -12,7 +12,8 @@ let numDetections = 0;
 let count = 0;
 let videoName = '';
 let index = 0;
-let start = Date.now();
+let start = Date.now()
+let isCam = false
 
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -33,6 +34,15 @@ let videoSelection = new Promise((resolve, reject) => {
 			})
 			.catch((err) => console.error(err));
 		setTimeout(() => {
+			firebase
+				.firestore()
+				.collection('Webcam')
+				.doc(start.toString())
+				.set({ name: start.toString() })
+				.then(() => console.log('Cam name added'))
+				.catch((error) => console.warn(error));
+			isCam = true
+			console.log(start)
 			resolve();
 		}, 3000);
 	});
@@ -46,6 +56,14 @@ let videoSelection = new Promise((resolve, reject) => {
 				videoName = videoUpload.value.substr(
 					videoUpload.value.lastIndexOf('\\') + 1
 				);
+				// add field name to enable document query
+				firebase
+					.firestore()
+					.collection('Emotion')
+					.doc(videoName)
+					.set({ name: videoName })
+					.then(() => console.log('added'))
+					.catch((error) => console.warn(error));
 				resolve();
 			}, 1000);
 		}
@@ -125,15 +143,6 @@ videoSelection
 		faceapi.matchDimensions(canvas, displaySize);
 		let firstPlay = true;
 
-		// add field name to enable document query
-		// firebase
-		// 	.firestore()
-		// 	.collection('Emotion')
-		// 	.doc(videoName)
-		// 	.set({ name: videoName })
-		// 	.then(() => console.log('added'))
-		// 	.catch((error) => console.warn(error));
-
 		// method to be looped
 		detectFrame = () => {
 			faceapi
@@ -164,7 +173,7 @@ videoSelection
 						);
 
 						// firestore
-						// firebaseUpdate(detections);
+						firebaseUpdate(detections);
 					}
 					if (detections != undefined) {
 						analysis(detections);
@@ -193,7 +202,7 @@ videoSelection
 				}); //0.1 second per frame
 		};
 		// begin inference
-		start = Date.now();
+		// start = Date.now();
 		detectFrame();
 	})
 	.catch((error) => {
@@ -243,7 +252,7 @@ function analysis(detections) {
 }
 
 // write to firestore database
-function firebaseUpdate(detections) {
+async function firebaseUpdate(detections) {
 	let expressions = detections.expressions;
 
 	expressions.timeFrame = (Date.now() - start) / 1000;
@@ -254,31 +263,53 @@ function firebaseUpdate(detections) {
 
 	//send the extracted info and initialize the arrays for every 10 frame
 	if (index % 10 == 0) {
-		sendStuffToFirebase();
+		await sendStuffToFirebase();
 		count++;
 		expressionCollection = [];
 	}
 	//Firebase module ends
 }
 
-function sendStuffToFirebase() {
-	objectToPush = {
-		name: videoName,
-		detections: expressionCollection,
-		numDetections: numDetections,
-	};
-	// Pushes video name, expression data, number of frames, time stamps for each frame (and landmarks)
-	firebase
-		.firestore()
-		.collection('Emotion')
-		.doc(videoName)
-		.collection(count.toString())
-		.doc('data')
-		.set(objectToPush)
-		.then(() => console.log('Saved to DB at frame ' + numDetections))
-		.catch((error) => {
-			console.warn(error);
-		});
+async function sendStuffToFirebase() {
+	if (!isCam) {
+		objectToPush = {
+			name: videoName,
+			detections: expressionCollection,
+			numDetections: numDetections,
+		};
+		// Pushes video name, expression data, number of frames, time stamps for each frame (and landmarks)
+
+		await firebase
+			.firestore()
+			.collection('Emotion')
+			.doc(videoName)
+			.collection(count.toString())
+			.doc('data')
+			.set(objectToPush)
+			.then(() => console.log('Saved to DB at frame ' + numDetections))
+			.catch((error) => {
+				console.warn(error);
+			});
+	} else {
+		if (count == 0)
+			console.log(start)
+		objectToPush = {
+			name: start.toString(),
+			detections: expressionCollection,
+			numDetections: numDetections,
+		};
+		await firebase
+			.firestore()
+			.collection('Webcam')
+			.doc(start.toString())
+			.collection(count.toString())
+			.doc('data')
+			.set(objectToPush)
+			.then(() => console.log('Saved to DB at frame ' + numDetections))
+			.catch((error) => {
+				console.warn(error);
+			});
+	}
 }
 
 // Triggered once the video ends
