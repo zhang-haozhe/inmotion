@@ -14,17 +14,6 @@ let videoName = '';
 let index = 0;
 let start = Date.now();
 
-// let webcam = new Promise((resolve, reject) => {
-// 	cam.addEventListener('click', () => {
-// 		navigator.getUserMedia(
-// 			{ video: {} },
-// 			(stream) => (video.srcObject = stream),
-// 			(err) => console.error(err)
-// 		);
-// 		resolve();
-// 	});
-// });
-
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
 	faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
@@ -35,18 +24,19 @@ async function startVideo() {
 	return;
 }
 
+video.addEventListener('play', () => {
+	console.log('hi');
+});
+
 let videoSelection = new Promise((resolve, reject) => {
 	cam.addEventListener('click', () => {
-		navigator.getUserMedia(
-			{ video: {} },
-			(stream) => (video.srcObject = stream),
-			(err) => console.error(err)
-		);
-		video.play();
-		console.log(video);
-		video.addEventListener('play', () => {
-			console.log('hello');
-		});
+		navigator.mediaDevices
+			.getUserMedia({ video: {} })
+			.then((stream) => {
+				video.srcObject = stream;
+				video.play();
+			})
+			.catch((err) => console.error(err));
 		setTimeout(() => {
 			resolve();
 		}, 3000);
