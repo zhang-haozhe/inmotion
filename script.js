@@ -119,7 +119,7 @@ for (let i = 0; i < series.length; i++) {
 	};
 }
 let layout = {
-	title: 'Instantaneous Emotion Inference Diagram',
+	title: 'Appear to be Diagram',
 	showlegend: true,
 	yaxis: { range: [0, 1] },
 };
@@ -135,7 +135,7 @@ videoSelection
 		} else {
 			canvas = document.getElementById('vidCanvas');
 		}
-		const displaySize = {
+		let displaySize = {
 			width: video.offsetWidth,
 			height: video.offsetHeight,
 		};
@@ -178,10 +178,10 @@ videoSelection
 						analysis(detections);
 						requestAnimationFrame(update);
 						console.log('detection updated');
-						const resizedDetections = faceapi.resizeResults(
-							detections,
-							displaySize
-						);
+						const resizedDetections = faceapi.resizeResults(detections, {
+							width: video.offsetWidth,
+							height: video.offsetHeight,
+						});
 						canvas
 							.getContext('2d')
 							.clearRect(0, 0, canvas.width, canvas.height);

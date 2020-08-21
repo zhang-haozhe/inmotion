@@ -31,12 +31,17 @@
 
 <body>
 	<div align="center">
-		<button id="cam">Web Cam</button>
-		<input type='file' id="videoUpload">
+		<!-- <button id="cam" class="btn btn-success btn-lg">Web Cam</button> -->
+		<div class="custom-file col-sm-4">
+			<div class="input-group-prepend">
+				<button id="cam" class="btn btn-outline-secondary " type="button">Web Cam</button>
+			</div>
+			<input type="file" class="custom-file-input" id="videoUpload">
+			<label class="custom-file-label" for="videoUpload">Choose file</label>
+		</div>
 	</div>
 	<div class="align-items-center justify-content-center">
 		<div class="container col">
-
 			<div id="canvasDiv" align="center">
 				<video id="video" style="width:50%" poster="/img/emotion.gif"></video>
 			</div>
