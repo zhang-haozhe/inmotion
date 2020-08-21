@@ -20,7 +20,6 @@ for doc in docs:
 
 df = pd.DataFrame(columns=['happy', 'neutral', 'surprised', 'sad', 'angry', 'fearful', 'disgusted', 'timeFrame', 'video'])
 
-
 for vid in db.collection(u'Emotion').stream():
     vid = vid.id
     count = 0

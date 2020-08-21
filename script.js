@@ -1,5 +1,6 @@
 const video = document.getElementById('video');
 const videoUpload = document.getElementById('videoUpload');
+const cam = document.getElementById('cam');
 const TESTER = document.getElementById('tester');
 const canvasDiv = document.getElementById('canvasDiv');
 let appearElement = document.getElementById('appear');
@@ -13,24 +14,43 @@ let videoName = '';
 let index = 0;
 let start = Date.now();
 
+// let webcam = new Promise((resolve, reject) => {
+// 	cam.addEventListener('click', () => {
+// 		navigator.getUserMedia(
+// 			{ video: {} },
+// 			(stream) => (video.srcObject = stream),
+// 			(err) => console.error(err)
+// 		);
+// 		resolve();
+// 	});
+// });
+
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
 	faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-	faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
 	faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-	faceapi.nets.ageGenderNet.loadFromUri('/models'),
 ]).then(startVideo);
 
 async function startVideo() {
 	return;
-	//   navigator.getUserMedia(
-	//     { video: {} },
-	//     stream => (video.srcObject = stream),
-	//     err => console.error(err)
-	//   );
 }
 
 let videoSelection = new Promise((resolve, reject) => {
+	cam.addEventListener('click', () => {
+		navigator.getUserMedia(
+			{ video: {} },
+			(stream) => (video.srcObject = stream),
+			(err) => console.error(err)
+		);
+		video.play();
+		console.log(video);
+		video.addEventListener('play', () => {
+			console.log('hello');
+		});
+		setTimeout(() => {
+			resolve();
+		}, 3000);
+	});
 	videoUpload.addEventListener('change', () => {
 		if (videoUpload) {
 			let videoURL = window.URL.createObjectURL(videoUpload.files[0]);
@@ -47,10 +67,7 @@ let videoSelection = new Promise((resolve, reject) => {
 	});
 });
 
-videoSelection.then(() => {
-	console.log('videoselection done');
-});
-
+// plotjs and data preparation
 let n = 100;
 let x = [];
 let y = [];
@@ -124,13 +141,13 @@ videoSelection
 		let firstPlay = true;
 
 		// add field name to enable document query
-		firebase
-			.firestore()
-			.collection('Emotion')
-			.doc(videoName)
-			.set({ name: videoName })
-			.then(() => console.log('added'))
-			.catch((error) => console.warn(error));
+		// firebase
+		// 	.firestore()
+		// 	.collection('Emotion')
+		// 	.doc(videoName)
+		// 	.set({ name: videoName })
+		// 	.then(() => console.log('added'))
+		// 	.catch((error) => console.warn(error));
 
 		// method to be looped
 		detectFrame = () => {
@@ -162,7 +179,7 @@ videoSelection
 						);
 
 						// firestore
-						firebaseUpdate(detections);
+						// firebaseUpdate(detections);
 					}
 					if (detections != undefined) {
 						analysis(detections);
@@ -201,9 +218,11 @@ videoSelection
 function analysis(detections) {
 	let accum = 0;
 	index++;
+	let expressions = detections.expressions;
+
 	// prep the expression arrays
 	for (let i = 0; i < series.length; i++) {
-		accum += detections.expressions[expr[i]];
+		accum += expressions[expr[i]];
 		series[i].push(accum);
 		series[i].shift();
 	}
@@ -211,6 +230,15 @@ function analysis(detections) {
 		updatedData[i] = { y: series[i] };
 	}
 
+	// you appear to be ***
+	// index of the emotion with the largest probability
+	let repExp = Object.keys(expressions).reduce((a, b) =>
+		expressions[a] > expressions[b] ? a : b
+	);
+	appearElement.innerHTML = 'appear to be ' + repExp;
+	appearElement.style = 'color:' + color[expr.indexOf(repExp)];
+
+	// you actually are ***
 	// calculate area of expressions
 	let areas = [];
 	series.forEach((element, idx) => {
@@ -232,13 +260,6 @@ function analysis(detections) {
 // write to firestore database
 function firebaseUpdate(detections) {
 	let expressions = detections.expressions;
-
-	// index of the emotion with the largest probability
-	let repExp = Object.keys(expressions).reduce((a, b) =>
-		expressions[a] > expressions[b] ? a : b
-	);
-	appearElement.innerHTML = 'appear to be ' + repExp;
-	appearElement.style = 'color:' + color[expr.indexOf(repExp)];
 
 	expressions.timeFrame = (Date.now() - start) / 1000;
 	expressionCollection.push(JSON.stringify(expressions));
